@@ -7,11 +7,11 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import org.springframework.stereotype.Service;
 
 import com.auth0.samples.githubclient.models.GithubRepository;
 
@@ -50,7 +50,7 @@ public class GithubService implements APIConfiguration {
         if(reposResponse.isSuccessful()){
             repos = reposResponse.body();
             if(repos != null){
-                logger.info(repos.toString());
+                logger.info("web request to Github was successfull");
             }else
                 logger.info("Zero repositories found");
         }else{
