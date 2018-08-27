@@ -37,7 +37,7 @@ public class GithubService implements APIConfiguration {
 
 
     public List<GithubRepository> getRepositories(){
-        Call<List<GithubRepository>> reposCall = service.listRepos(ACCESS_TOKEN);
+        Call<List<GithubRepository>> reposCall = service.listRepos(ACCESS_TOKEN, API_VERSION_SPEC);
 
         Response<List<GithubRepository>> reposResponse = null;
         List<GithubRepository> repos = null;
@@ -63,5 +63,32 @@ public class GithubService implements APIConfiguration {
         return repos;
     }
 
+
+    public GithubRepository createRepository(GithubRepository repo){
+        Call<GithubRepository> newRepoCall = service.createRepo(ACCESS_TOKEN, API_VERSION_SPEC, JSON_CONTENT_TYPE);
+
+        Response<GithubRepository> newRepoResponse = null;
+        GithubRepository newRepo = null;
+        try {
+            newRepoResponse = newRepoCall.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(newRepoResponse.isSuccessful()){
+            repo = newRepoResponse.body();
+            if(repo != null){
+                logger.info("web request to Github was successfull");
+            }else
+                logger.info("Zero repositories found");
+        }else{
+            ResponseBody errorReponse = newRepoResponse.errorBody();
+            if(errorReponse != null){
+                logger.warn(errorReponse.toString());
+            }
+        }
+
+        return repo;
+    }
 
 }
