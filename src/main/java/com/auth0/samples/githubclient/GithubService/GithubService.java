@@ -7,13 +7,14 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import com.auth0.samples.githubclient.models.GithubRepository;
 
-
+@Service
 public class GithubService implements APIConfiguration {
 
     Logger logger = LoggerFactory.getLogger(GithubService.class);
