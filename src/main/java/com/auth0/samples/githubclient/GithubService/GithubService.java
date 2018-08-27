@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.auth0.samples.githubclient.models.GithubRepository;
+
 
 @Service
 public class GithubService implements APIConfiguration {
@@ -26,6 +28,7 @@ public class GithubService implements APIConfiguration {
     public GithubService(){
         retrofit = new Retrofit.Builder()
                 .baseUrl(API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         service = retrofit.create(RepositoryInterface.class);
