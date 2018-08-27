@@ -65,7 +65,7 @@ public class GithubService implements APIConfiguration {
 
 
     public GithubRepository createRepository(GithubRepository repo){
-        Call<GithubRepository> newRepoCall = service.createRepo(ACCESS_TOKEN, API_VERSION_SPEC, JSON_CONTENT_TYPE);
+        Call<GithubRepository> newRepoCall = service.createRepo(repo, ACCESS_TOKEN, API_VERSION_SPEC, JSON_CONTENT_TYPE);
 
         Response<GithubRepository> newRepoResponse = null;
         GithubRepository newRepo = null;
@@ -84,7 +84,11 @@ public class GithubService implements APIConfiguration {
         }else{
             ResponseBody errorReponse = newRepoResponse.errorBody();
             if(errorReponse != null){
-                logger.warn(errorReponse.toString());
+                try {
+                    logger.warn(errorReponse.string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
