@@ -3,7 +3,10 @@ package com.auth0.samples.githubclient.controllers;
 import com.auth0.samples.githubclient.GithubService.GithubService;
 import com.auth0.samples.githubclient.models.GithubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,5 +20,10 @@ public class GithubClientController{
     @GetMapping("/repos")
     public List<GithubRepository> getRepos(){
         return githubService.getRepositories();
+    }
+
+    @PostMapping("/repos")
+    public GithubRepository createRepo(@RequestBody GithubRepository newRepo){
+        return githubService.createRepository(newRepo);
     }
 }
