@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 
+import com.auth0.samples.githubclient.models.Status;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,8 +77,8 @@ public class GithubService implements APIConfiguration {
         }
 
         if(newRepoResponse.isSuccessful()){
-            repo = newRepoResponse.body();
-            if(repo != null){
+            newRepo = newRepoResponse.body();
+            if(newRepo != null){
                 logger.info("web request to Github was successfull");
             }else
                 logger.info("Zero repositories found");
@@ -92,7 +93,39 @@ public class GithubService implements APIConfiguration {
             }
         }
 
-        return repo;
+        return newRepo;
+    }
+
+    public Status deleteRepository(String owner, String repoName){
+        Call<Status> deleteRepoCall = service.deleteRepo(ACCESS_TOKEN, API_VERSION_SPEC, repoName, owner);
+
+        Response<Status> deleteStatusResponse = null;
+        Status deleteStatus = null;
+        try{
+            deleteStatusResponse = deleteRepoCall.execute();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        if(deleteStatusResponse.isSuccessful()){
+            int statusCode = deleteStatusResponse.code();
+            if(statusCode == 204){
+                deleteStatus = new Status("204 No Content");
+                logger.info("Delete web request to Github was successfull");
+            }else
+                logger.info("Delete Request Failed");
+        }else{
+            ResponseBody errorReponse = deleteStatusResponse.errorBody();
+            if(errorReponse != null){
+                try {
+                    logger.warn(errorReponse.string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return deleteStatus;
     }
 
 }
