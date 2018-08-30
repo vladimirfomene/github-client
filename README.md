@@ -48,4 +48,5 @@ request body:
 You can change the above repository attributes to fit your personal repository information.
 
 * Finally, delete the created repository by executing the following request, `DELETE http://localhost:8080/repos/{owner}/{repo}`
-replace {owner} with your github account name and {repo} with your github repository name.
+replace {owner} with your github account name and {repo} with your github repository name. If you are testing 
+with my personal access token, my account name is `vladimirfomene`.
