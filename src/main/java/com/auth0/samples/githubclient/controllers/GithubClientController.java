@@ -1,22 +1,22 @@
 package com.auth0.samples.githubclient.controllers;
 
-import com.auth0.samples.githubclient.GithubService.GithubService;
+import com.auth0.samples.githubclient.GithubService.GitHubService;
 import com.auth0.samples.githubclient.models.GithubRepository;
 import com.auth0.samples.githubclient.models.Status;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 public class GithubClientController{
 
     @Autowired
-    private GithubService githubService;
+    private GitHubService githubService;
 
     @GetMapping("/repos")
-    public List<GithubRepository> getRepos(){
+    public List<GithubRepository> getRepos() throws IOException {
         return githubService.getRepositories();
     }
 

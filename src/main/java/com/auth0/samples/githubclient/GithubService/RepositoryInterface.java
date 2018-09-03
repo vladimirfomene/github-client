@@ -1,12 +1,16 @@
 package com.auth0.samples.githubclient.GithubService;
 
-import java.util.List;
-
+import com.auth0.samples.githubclient.models.GithubRepository;
 import com.auth0.samples.githubclient.models.Status;
 import retrofit2.Call;
-import retrofit2.http.*;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 
-import com.auth0.samples.githubclient.models.GithubRepository;
+import java.util.List;
 
 public interface RepositoryInterface {
 
