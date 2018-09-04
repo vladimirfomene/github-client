@@ -1,63 +1,52 @@
 package com.auth0.samples.githubclient.GithubService;
 
-import java.io.IOException;
-import java.util.List;
-
-
+import com.auth0.samples.githubclient.models.GithubRepository;
 import com.auth0.samples.githubclient.models.Status;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import org.springframework.stereotype.Service;
 
-import com.auth0.samples.githubclient.models.GithubRepository;
-
+import java.io.IOException;
+import java.util.List;
 
 @Service
-public class GithubService implements APIConfiguration {
+public class GitHubService implements APIConfiguration {
 
-    Logger logger = LoggerFactory.getLogger(GithubService.class);
+    private Logger logger = LoggerFactory.getLogger(GitHubService.class);
 
-    private Retrofit retrofit = null;
+    private RepositoryInterface service = null;
 
-    RepositoryInterface service = null;
-
-    public GithubService(){
-        retrofit = new Retrofit.Builder()
+    public GitHubService() {
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         service = retrofit.create(RepositoryInterface.class);
-
     }
 
-
-    public List<GithubRepository> getRepositories(){
+    public List<GithubRepository> getRepositories() throws IOException {
         Call<List<GithubRepository>> reposCall = service.listRepos(ACCESS_TOKEN, API_VERSION_SPEC);
 
         Response<List<GithubRepository>> reposResponse = null;
         List<GithubRepository> repos = null;
-        try {
-            reposResponse = reposCall.execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        reposResponse = reposCall.execute();
 
-        if(reposResponse.isSuccessful()){
+        if (reposResponse.isSuccessful()) {
             repos = reposResponse.body();
-            if(repos != null){
-                logger.info("web request to Github was successfull");
-            }else
+            if (repos != null) {
+                logger.info("web request to Github was successful");
+            } else
                 logger.info("Zero repositories found");
-        }else{
-            ResponseBody errorReponse = reposResponse.errorBody();
-            if(errorReponse != null){
-                logger.warn(errorReponse.toString());
+        } else {
+            ResponseBody errorResponse = reposResponse.errorBody();
+            if (errorResponse != null) {
+                logger.warn(errorResponse.toString());
             }
         }
 
@@ -65,7 +54,7 @@ public class GithubService implements APIConfiguration {
     }
 
 
-    public GithubRepository createRepository(GithubRepository repo){
+    public GithubRepository createRepository(GithubRepository repo) {
         Call<GithubRepository> newRepoCall = service.createRepo(repo, ACCESS_TOKEN, API_VERSION_SPEC, JSON_CONTENT_TYPE);
 
         Response<GithubRepository> newRepoResponse = null;
@@ -76,15 +65,15 @@ public class GithubService implements APIConfiguration {
             e.printStackTrace();
         }
 
-        if(newRepoResponse.isSuccessful()){
+        if (newRepoResponse.isSuccessful()) {
             newRepo = newRepoResponse.body();
-            if(newRepo != null){
+            if (newRepo != null) {
                 logger.info("web request to Github was successfull");
-            }else
+            } else
                 logger.info("Zero repositories found");
-        }else{
+        } else {
             ResponseBody errorReponse = newRepoResponse.errorBody();
-            if(errorReponse != null){
+            if (errorReponse != null) {
                 try {
                     logger.warn(errorReponse.string());
                 } catch (IOException e) {
@@ -96,27 +85,27 @@ public class GithubService implements APIConfiguration {
         return newRepo;
     }
 
-    public Status deleteRepository(String owner, String repoName){
+    public Status deleteRepository(String owner, String repoName) {
         Call<Status> deleteRepoCall = service.deleteRepo(ACCESS_TOKEN, API_VERSION_SPEC, repoName, owner);
 
         Response<Status> deleteStatusResponse = null;
         Status deleteStatus = null;
-        try{
+        try {
             deleteStatusResponse = deleteRepoCall.execute();
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(deleteStatusResponse.isSuccessful()){
+        if (deleteStatusResponse.isSuccessful()) {
             int statusCode = deleteStatusResponse.code();
-            if(statusCode == 204){
+            if (statusCode == 204) {
                 deleteStatus = new Status("204 No Content");
                 logger.info("Delete web request to Github was successfull");
-            }else
+            } else
                 logger.info("Delete Request Failed");
-        }else{
+        } else {
             ResponseBody errorReponse = deleteStatusResponse.errorBody();
-            if(errorReponse != null){
+            if (errorReponse != null) {
                 try {
                     logger.warn(errorReponse.string());
                 } catch (IOException e) {
