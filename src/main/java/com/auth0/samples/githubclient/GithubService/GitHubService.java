@@ -5,6 +5,7 @@ import com.auth0.samples.githubclient.models.Status;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -16,6 +17,11 @@ import java.util.List;
 
 @Service
 public class GitHubService implements APIConfiguration {
+
+    @Value("${accessToken}")
+    private String accessToken;
+
+    private String ACCESS_TOKEN = "token " + accessToken;
 
     private Logger logger = LoggerFactory.getLogger(GitHubService.class);
 
@@ -31,7 +37,7 @@ public class GitHubService implements APIConfiguration {
     }
 
     public List<GithubRepository> getRepositories() throws IOException {
-        Call<List<GithubRepository>> reposCall = service.listRepos(ACCESS_TOKEN, API_VERSION_SPEC);
+        Call<List<GithubRepository>> reposCall = service.listRepos("token " + accessToken, API_VERSION_SPEC);
 
         Response<List<GithubRepository>> reposResponse = null;
         List<GithubRepository> repos = null;
@@ -46,7 +52,9 @@ public class GitHubService implements APIConfiguration {
         } else {
             ResponseBody errorResponse = reposResponse.errorBody();
             if (errorResponse != null) {
-                logger.warn(errorResponse.toString());
+                logger.warn(errorResponse.string());
+                logger.warn("AcessToken from @Value: {}", accessToken);
+                logger.warn("ACCESS_TOKEN from @Value: {}", ACCESS_TOKEN);
             }
         }
 

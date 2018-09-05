@@ -21,12 +21,12 @@ public class GithubClientController{
     }
 
     @PostMapping("/repos")
-    public GithubRepository createRepo(@RequestBody GithubRepository newRepo){
+    public GithubRepository createRepo(@RequestBody GithubRepository newRepo) {
         return githubService.createRepository(newRepo);
     }
 
     @DeleteMapping("/repos/{owner}/{repo}")
-    public Status deleteRepo(@PathVariable("owner") String owner, @PathVariable("repo") String repoName){
+    public Status deleteRepo(@PathVariable("owner") String owner, @PathVariable("repo") String repoName) {
         return githubService.deleteRepository(owner, repoName);
     }
 }

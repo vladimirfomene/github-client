@@ -1,7 +1,7 @@
 package com.auth0.samples.githubclient.GithubService;
 
+
 public interface APIConfiguration {
-    public static final String ACCESS_TOKEN = "token <Access-Token-Here>";
 
     public static final String API_BASE_URL = "https://api.github.com/";
 
